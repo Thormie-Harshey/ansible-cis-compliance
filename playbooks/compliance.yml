@@ -14,9 +14,11 @@
     - { role: cis_logging, tags: [logging] }
     - { role: cis_network, tags: [network] }
 
-  post_tasks:
-    # TEMPORARY: replaced by the cis_report role later
-    - name: Show compliance results
-      ansible.builtin.debug:
-        var: cis_results
-      tags: [always]
+- name: Build compliance report
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+
+  roles:
+    - { role: cis_report, tags: [always] }

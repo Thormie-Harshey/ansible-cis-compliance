@@ -1,0 +1,360 @@
+{
+    "generated": "November 10, 2026 14:41 UTC",
+    "hosts": {
+        "db1": [
+            {
+                "control": "Root login disabled",
+                "expected": "no",
+                "found": "no",
+                "id": "SSH-01",
+                "status": "PASS"
+            },
+            {
+                "control": "Password authentication disabled",
+                "expected": "no",
+                "found": "no",
+                "id": "SSH-02",
+                "status": "PASS"
+            },
+            {
+                "control": "MaxAuthTries set to 4",
+                "expected": "4",
+                "found": "4",
+                "id": "SSH-03",
+                "status": "PASS"
+            },
+            {
+                "control": "UFW firewall enabled",
+                "expected": "active",
+                "found": "active",
+                "id": "FW-01",
+                "status": "PASS"
+            },
+            {
+                "control": "Default deny incoming enforced",
+                "expected": "deny (incoming)",
+                "found": "deny (incoming)",
+                "id": "FW-02",
+                "status": "PASS"
+            },
+            {
+                "control": "No accounts with empty passwords",
+                "expected": "none",
+                "found": "none",
+                "id": "USR-01",
+                "status": "PASS"
+            },
+            {
+                "control": "Only approved users have sudo",
+                "expected": "ubuntu",
+                "found": "none unapproved",
+                "id": "USR-02",
+                "status": "PASS"
+            },
+            {
+                "control": "/etc/passwd is 644",
+                "expected": "0644 root:root",
+                "found": "0644 root:root",
+                "id": "FP-01",
+                "status": "PASS"
+            },
+            {
+                "control": "/etc/shadow is 600",
+                "expected": "0600 root:shadow",
+                "found": "0600 root:shadow",
+                "id": "FP-02",
+                "status": "PASS"
+            },
+            {
+                "control": "Admin authorized_keys is 600",
+                "expected": "0600 ubuntu:ubuntu",
+                "found": "0600 ubuntu:ubuntu",
+                "id": "FP-03",
+                "status": "PASS"
+            },
+            {
+                "control": "SSH host key (ed25519) is 600",
+                "expected": "0600 root:root",
+                "found": "0600 root:root",
+                "id": "FP-04",
+                "status": "PASS"
+            },
+            {
+                "control": "SSH host key (rsa) is 600",
+                "expected": "0600 root:root",
+                "found": "0600 root:root",
+                "id": "FP-05",
+                "status": "PASS"
+            },
+            {
+                "control": "SSH host key (ecdsa) is 600",
+                "expected": "0600 root:root",
+                "found": "0600 root:root",
+                "id": "FP-06",
+                "status": "PASS"
+            },
+            {
+                "control": "Telnet not installed",
+                "expected": "not installed",
+                "found": "not installed",
+                "id": "SVC-01",
+                "status": "PASS"
+            },
+            {
+                "control": "rsh and rlogin not installed",
+                "expected": "not installed",
+                "found": "not installed",
+                "id": "SVC-02",
+                "status": "PASS"
+            },
+            {
+                "control": "No pending security updates",
+                "expected": "0 pending",
+                "found": "0 pending",
+                "id": "UPD-01",
+                "status": "PASS"
+            },
+            {
+                "control": "Automatic security updates enabled",
+                "expected": "enabled",
+                "found": "enabled",
+                "id": "UPD-02",
+                "status": "PASS"
+            },
+            {
+                "control": "rsyslog running",
+                "expected": "running",
+                "found": "running",
+                "id": "LOG-01",
+                "status": "PASS"
+            },
+            {
+                "control": "journald stores logs persistently",
+                "expected": "Storage=persistent",
+                "found": "Storage=persistent",
+                "id": "LOG-02",
+                "status": "PASS"
+            },
+            {
+                "control": "IP forwarding disabled",
+                "expected": "0",
+                "found": "1",
+                "id": "NET-01",
+                "status": "FIXED"
+            },
+            {
+                "control": "Send redirects disabled (all)",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-02",
+                "status": "PASS"
+            },
+            {
+                "control": "Send redirects disabled (default)",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-03",
+                "status": "PASS"
+            },
+            {
+                "control": "ICMP redirects not accepted (all)",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-04",
+                "status": "PASS"
+            },
+            {
+                "control": "ICMP redirects not accepted (default)",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-05",
+                "status": "PASS"
+            },
+            {
+                "control": "IPv6 ICMP redirects not accepted",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-06",
+                "status": "PASS"
+            }
+        ],
+        "web1": [
+            {
+                "control": "Root login disabled",
+                "expected": "no",
+                "found": "no",
+                "id": "SSH-01",
+                "status": "PASS"
+            },
+            {
+                "control": "Password authentication disabled",
+                "expected": "no",
+                "found": "no",
+                "id": "SSH-02",
+                "status": "PASS"
+            },
+            {
+                "control": "MaxAuthTries set to 4",
+                "expected": "4",
+                "found": "4",
+                "id": "SSH-03",
+                "status": "PASS"
+            },
+            {
+                "control": "UFW firewall enabled",
+                "expected": "active",
+                "found": "active",
+                "id": "FW-01",
+                "status": "PASS"
+            },
+            {
+                "control": "Default deny incoming enforced",
+                "expected": "deny (incoming)",
+                "found": "deny (incoming)",
+                "id": "FW-02",
+                "status": "PASS"
+            },
+            {
+                "control": "No accounts with empty passwords",
+                "expected": "none",
+                "found": "none",
+                "id": "USR-01",
+                "status": "PASS"
+            },
+            {
+                "control": "Only approved users have sudo",
+                "expected": "ubuntu",
+                "found": "intruder",
+                "id": "USR-02",
+                "status": "FIXED"
+            },
+            {
+                "control": "/etc/passwd is 644",
+                "expected": "0644 root:root",
+                "found": "0644 root:root",
+                "id": "FP-01",
+                "status": "PASS"
+            },
+            {
+                "control": "/etc/shadow is 600",
+                "expected": "0600 root:shadow",
+                "found": "0600 root:shadow",
+                "id": "FP-02",
+                "status": "PASS"
+            },
+            {
+                "control": "Admin authorized_keys is 600",
+                "expected": "0600 ubuntu:ubuntu",
+                "found": "0600 ubuntu:ubuntu",
+                "id": "FP-03",
+                "status": "PASS"
+            },
+            {
+                "control": "SSH host key (ed25519) is 600",
+                "expected": "0600 root:root",
+                "found": "0600 root:root",
+                "id": "FP-04",
+                "status": "PASS"
+            },
+            {
+                "control": "SSH host key (rsa) is 600",
+                "expected": "0600 root:root",
+                "found": "0600 root:root",
+                "id": "FP-05",
+                "status": "PASS"
+            },
+            {
+                "control": "SSH host key (ecdsa) is 600",
+                "expected": "0600 root:root",
+                "found": "0600 root:root",
+                "id": "FP-06",
+                "status": "PASS"
+            },
+            {
+                "control": "Telnet not installed",
+                "expected": "not installed",
+                "found": "not installed",
+                "id": "SVC-01",
+                "status": "PASS"
+            },
+            {
+                "control": "rsh and rlogin not installed",
+                "expected": "not installed",
+                "found": "not installed",
+                "id": "SVC-02",
+                "status": "PASS"
+            },
+            {
+                "control": "No pending security updates",
+                "expected": "0 pending",
+                "found": "4 pending",
+                "id": "UPD-01",
+                "status": "FIXED"
+            },
+            {
+                "control": "Automatic security updates enabled",
+                "expected": "enabled",
+                "found": "enabled",
+                "id": "UPD-02",
+                "status": "PASS"
+            },
+            {
+                "control": "rsyslog running",
+                "expected": "running",
+                "found": "running",
+                "id": "LOG-01",
+                "status": "PASS"
+            },
+            {
+                "control": "journald stores logs persistently",
+                "expected": "Storage=persistent",
+                "found": "Storage=persistent",
+                "id": "LOG-02",
+                "status": "PASS"
+            },
+            {
+                "control": "IP forwarding disabled",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-01",
+                "status": "PASS"
+            },
+            {
+                "control": "Send redirects disabled (all)",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-02",
+                "status": "PASS"
+            },
+            {
+                "control": "Send redirects disabled (default)",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-03",
+                "status": "PASS"
+            },
+            {
+                "control": "ICMP redirects not accepted (all)",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-04",
+                "status": "PASS"
+            },
+            {
+                "control": "ICMP redirects not accepted (default)",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-05",
+                "status": "PASS"
+            },
+            {
+                "control": "IPv6 ICMP redirects not accepted",
+                "expected": "0",
+                "found": "0",
+                "id": "NET-06",
+                "status": "PASS"
+            }
+        ]
+    },
+    "mode": "Remediation (fixes applied)"
+}

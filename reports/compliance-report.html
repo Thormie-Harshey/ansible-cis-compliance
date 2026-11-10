@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CIS Compliance Report</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 2rem; color: #222; }
+  .meta { color: #555; margin-bottom: 2rem; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
+  th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+  th { background: #f3f3f3; }
+  .summary span { margin-right: 1.5rem; font-weight: bold; }
+  .status-PASS { background: #e6f4ea; color: #137333; font-weight: bold; }
+  .status-FAIL { background: #fce8e6; color: #c5221f; font-weight: bold; }
+  .status-FIXED { background: #fef7e0; color: #b06000; font-weight: bold; }
+  .status-NA { background: #eeeeee; color: #555; }
+</style>
+</head>
+<body>
+<h1>CIS Compliance Report</h1>
+<p class="meta">Generated November 10, 2026 14:41 UTC | Mode: Remediation (fixes applied)</p>
+<h2>web1</h2>
+<p class="summary">
+  <span>PASS: 23</span>
+  <span>FAIL: 0</span>
+  <span>FIXED: 2</span>
+  <span>Total: 25</span>
+</p>
+<table>
+  <tr><th>ID</th><th>Control</th><th>Expected</th><th>Found</th><th>Status</th></tr>
+  <tr>
+    <td>SSH-01</td><td>Root login disabled</td><td>no</td><td>no</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>SSH-02</td><td>Password authentication disabled</td><td>no</td><td>no</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>SSH-03</td><td>MaxAuthTries set to 4</td><td>4</td><td>4</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FW-01</td><td>UFW firewall enabled</td><td>active</td><td>active</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FW-02</td><td>Default deny incoming enforced</td><td>deny (incoming)</td><td>deny (incoming)</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>USR-01</td><td>No accounts with empty passwords</td><td>none</td><td>none</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>USR-02</td><td>Only approved users have sudo</td><td>ubuntu</td><td>intruder</td>
+    <td class="status-FIXED">FIXED</td>
+  </tr>
+  <tr>
+    <td>FP-01</td><td>/etc/passwd is 644</td><td>0644 root:root</td><td>0644 root:root</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-02</td><td>/etc/shadow is 600</td><td>0600 root:shadow</td><td>0600 root:shadow</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-03</td><td>Admin authorized_keys is 600</td><td>0600 ubuntu:ubuntu</td><td>0600 ubuntu:ubuntu</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-04</td><td>SSH host key (ed25519) is 600</td><td>0600 root:root</td><td>0600 root:root</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-05</td><td>SSH host key (rsa) is 600</td><td>0600 root:root</td><td>0600 root:root</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-06</td><td>SSH host key (ecdsa) is 600</td><td>0600 root:root</td><td>0600 root:root</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>SVC-01</td><td>Telnet not installed</td><td>not installed</td><td>not installed</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>SVC-02</td><td>rsh and rlogin not installed</td><td>not installed</td><td>not installed</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>UPD-01</td><td>No pending security updates</td><td>0 pending</td><td>4 pending</td>
+    <td class="status-FIXED">FIXED</td>
+  </tr>
+  <tr>
+    <td>UPD-02</td><td>Automatic security updates enabled</td><td>enabled</td><td>enabled</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>LOG-01</td><td>rsyslog running</td><td>running</td><td>running</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>LOG-02</td><td>journald stores logs persistently</td><td>Storage=persistent</td><td>Storage=persistent</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-01</td><td>IP forwarding disabled</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-02</td><td>Send redirects disabled (all)</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-03</td><td>Send redirects disabled (default)</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-04</td><td>ICMP redirects not accepted (all)</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-05</td><td>ICMP redirects not accepted (default)</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-06</td><td>IPv6 ICMP redirects not accepted</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+</table>
+<h2>db1</h2>
+<p class="summary">
+  <span>PASS: 24</span>
+  <span>FAIL: 0</span>
+  <span>FIXED: 1</span>
+  <span>Total: 25</span>
+</p>
+<table>
+  <tr><th>ID</th><th>Control</th><th>Expected</th><th>Found</th><th>Status</th></tr>
+  <tr>
+    <td>SSH-01</td><td>Root login disabled</td><td>no</td><td>no</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>SSH-02</td><td>Password authentication disabled</td><td>no</td><td>no</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>SSH-03</td><td>MaxAuthTries set to 4</td><td>4</td><td>4</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FW-01</td><td>UFW firewall enabled</td><td>active</td><td>active</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FW-02</td><td>Default deny incoming enforced</td><td>deny (incoming)</td><td>deny (incoming)</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>USR-01</td><td>No accounts with empty passwords</td><td>none</td><td>none</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>USR-02</td><td>Only approved users have sudo</td><td>ubuntu</td><td>none unapproved</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-01</td><td>/etc/passwd is 644</td><td>0644 root:root</td><td>0644 root:root</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-02</td><td>/etc/shadow is 600</td><td>0600 root:shadow</td><td>0600 root:shadow</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-03</td><td>Admin authorized_keys is 600</td><td>0600 ubuntu:ubuntu</td><td>0600 ubuntu:ubuntu</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-04</td><td>SSH host key (ed25519) is 600</td><td>0600 root:root</td><td>0600 root:root</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-05</td><td>SSH host key (rsa) is 600</td><td>0600 root:root</td><td>0600 root:root</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>FP-06</td><td>SSH host key (ecdsa) is 600</td><td>0600 root:root</td><td>0600 root:root</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>SVC-01</td><td>Telnet not installed</td><td>not installed</td><td>not installed</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>SVC-02</td><td>rsh and rlogin not installed</td><td>not installed</td><td>not installed</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>UPD-01</td><td>No pending security updates</td><td>0 pending</td><td>0 pending</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>UPD-02</td><td>Automatic security updates enabled</td><td>enabled</td><td>enabled</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>LOG-01</td><td>rsyslog running</td><td>running</td><td>running</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>LOG-02</td><td>journald stores logs persistently</td><td>Storage=persistent</td><td>Storage=persistent</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-01</td><td>IP forwarding disabled</td><td>0</td><td>1</td>
+    <td class="status-FIXED">FIXED</td>
+  </tr>
+  <tr>
+    <td>NET-02</td><td>Send redirects disabled (all)</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-03</td><td>Send redirects disabled (default)</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-04</td><td>ICMP redirects not accepted (all)</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-05</td><td>ICMP redirects not accepted (default)</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+  <tr>
+    <td>NET-06</td><td>IPv6 ICMP redirects not accepted</td><td>0</td><td>0</td>
+    <td class="status-PASS">PASS</td>
+  </tr>
+</table>
+</body>
+</html>

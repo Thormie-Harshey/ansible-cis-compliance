@@ -1,0 +1,29 @@
+---
+- name: "Report | Collect every server's scorecard"
+  ansible.builtin.set_fact:
+    cis_report_hosts: "{{ cis_report_hosts | default({}) | combine({item: hostvars[item].cis_results | default([])}) }}"
+  loop: "{{ groups['fleet'] }}"
+
+- name: "Report | Set date and mode"
+  ansible.builtin.set_fact:
+    cis_report_generated: "{{ now(utc=true, fmt='%B %-d, %Y %H:%M UTC') }}"
+    cis_report_mode: "{{ 'Audit (check mode, no changes made)' if ansible_check_mode else 'Remediation (fixes applied)' }}"
+
+# These write to your laptop, not the servers, so they run even in pretend mode
+- name: "Report | Make sure the reports folder exists"
+  ansible.builtin.file:
+    path: "{{ cis_report_dir }}"
+    state: directory
+  check_mode: false
+
+- name: "Report | Write JSON report"
+  ansible.builtin.copy:
+    dest: "{{ cis_report_dir }}/compliance-report.json"
+    content: "{{ {'generated': cis_report_generated, 'mode': cis_report_mode, 'hosts': cis_report_hosts} | to_nice_json }}"
+  check_mode: false
+
+- name: "Report | Write HTML report"
+  ansible.builtin.template:
+    src: report.html.j2
+    dest: "{{ cis_report_dir }}/compliance-report.html"
+  check_mode: false

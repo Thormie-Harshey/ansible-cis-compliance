@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CIS Compliance Report</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 2rem; color: #222; }
+  .meta { color: #555; margin-bottom: 2rem; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
+  th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+  th { background: #f3f3f3; }
+  .summary span { margin-right: 1.5rem; font-weight: bold; }
+  .status-PASS { background: #e6f4ea; color: #137333; font-weight: bold; }
+  .status-FAIL { background: #fce8e6; color: #c5221f; font-weight: bold; }
+  .status-FIXED { background: #fef7e0; color: #b06000; font-weight: bold; }
+  .status-NA { background: #eeeeee; color: #555; }
+</style>
+</head>
+<body>
+<h1>CIS Compliance Report</h1>
+<p class="meta">Generated {{ cis_report_generated }} | Mode: {{ cis_report_mode }}</p>
+{% for host, results in cis_report_hosts.items() %}
+<h2>{{ host }}</h2>
+<p class="summary">
+  <span>PASS: {{ results | selectattr('status', 'equalto', 'PASS') | list | length }}</span>
+  <span>FAIL: {{ results | selectattr('status', 'equalto', 'FAIL') | list | length }}</span>
+  <span>FIXED: {{ results | selectattr('status', 'equalto', 'FIXED') | list | length }}</span>
+  <span>Total: {{ results | length }}</span>
+</p>
+<table>
+  <tr><th>ID</th><th>Control</th><th>Expected</th><th>Found</th><th>Status</th></tr>
+{% for r in results %}
+  <tr>
+    <td>{{ r.id }}</td><td>{{ r.control }}</td><td>{{ r.expected }}</td><td>{{ r.found }}</td>
+    <td class="status-{{ r.status | replace('/', '') }}">{{ r.status }}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endfor %}
+</body>
+</html>
