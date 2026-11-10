@@ -1,0 +1,31 @@
+---
+# 1. AUDIT: read installed software (safe in pretend mode)
+- name: "Services | Read installed packages"
+  ansible.builtin.package_facts:
+    manager: apt
+
+# 2. FIX: uninstall only what is actually installed
+- name: "Services | Remove unsafe packages"
+  ansible.builtin.apt:
+    name: "{{ item.packages | select('in', ansible_facts.packages) | list }}"
+    state: absent
+    purge: true
+  loop: "{{ cis_services_controls }}"
+  loop_control:
+    label: "{{ item.id }}"
+  when: item.packages | select('in', ansible_facts.packages) | list | length > 0
+
+# 3. RECORD
+- name: "Services | Record compliance results"
+  ansible.builtin.set_fact:
+    cis_results: "{{ cis_results | default([]) + [{
+      'id': item.id,
+      'control': item.title,
+      'expected': 'not installed',
+      'found': (item.packages | select('in', ansible_facts.packages) | join(', ')) or 'not installed',
+      'status': 'PASS' if not (item.packages | select('in', ansible_facts.packages) | list)
+                else ('FAIL' if ansible_check_mode else 'FIXED')
+      }] }}"
+  loop: "{{ cis_services_controls }}"
+  loop_control:
+    label: "{{ item.id }}"

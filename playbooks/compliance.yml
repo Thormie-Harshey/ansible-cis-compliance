@@ -5,13 +5,18 @@
   gather_facts: true
 
   roles:
-    - cis_ssh
-    - cis_firewall
-    - cis_users
-    - cis_file_permissions
+    - { role: cis_ssh, tags: [ssh] }
+    - { role: cis_firewall, tags: [firewall] }
+    - { role: cis_users, tags: [users] }
+    - { role: cis_file_permissions, tags: [files] }
+    - { role: cis_services, tags: [services] }
+    - { role: cis_updates, tags: [updates] }
+    - { role: cis_logging, tags: [logging] }
+    - { role: cis_network, tags: [network] }
 
   post_tasks:
     # TEMPORARY: replaced by the cis_report role later
     - name: Show compliance results
       ansible.builtin.debug:
         var: cis_results
+      tags: [always]

@@ -1,0 +1,44 @@
+---
+# 1. AUDIT: refresh the shop catalogue (harmless), then list security updates
+- name: "Updates | Refresh package lists"
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  check_mode: false
+  changed_when: false
+
+- name: "Updates | List pending security updates"
+  ansible.builtin.shell: apt list --upgradable 2>/dev/null | grep -- '-security' | cut -d/ -f1 || true
+  register: cis_updates_pending
+  check_mode: false
+  changed_when: false
+
+# 2. FIX
+- name: "Updates | Install pending security updates"
+  ansible.builtin.command: unattended-upgrade
+  when: cis_updates_pending.stdout_lines | length > 0
+
+- name: "Updates | Automatic security updates enabled"
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+    owner: root
+    group: root
+    mode: "0644"
+  register: cis_updates_auto
+
+# 3. RECORD
+- name: "Updates | Record compliance results"
+  ansible.builtin.set_fact:
+    cis_results: "{{ cis_results | default([]) + [
+      {'id': 'UPD-01', 'control': 'No pending security updates',
+       'expected': '0 pending',
+       'found': (cis_updates_pending.stdout_lines | length | string) ~ ' pending',
+       'status': 'PASS' if not cis_updates_pending.stdout_lines else ('FAIL' if ansible_check_mode else 'FIXED')},
+      {'id': 'UPD-02', 'control': 'Automatic security updates enabled',
+       'expected': 'enabled',
+       'found': 'not enabled' if cis_updates_auto.changed else 'enabled',
+       'status': 'PASS' if not cis_updates_auto.changed else ('FAIL' if ansible_check_mode else 'FIXED')}
+      ] }}"

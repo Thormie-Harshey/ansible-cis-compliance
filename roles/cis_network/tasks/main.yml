@@ -1,0 +1,36 @@
+---
+# 1. AUDIT: read each live kernel setting (read-only, don't pretend)
+- name: "Network | Read current kernel settings"
+  ansible.builtin.command: sysctl -n {{ item.name }}
+  register: cis_network_current
+  loop: "{{ cis_network_settings }}"
+  loop_control:
+    label: "{{ item.id }}"
+  check_mode: false
+  changed_when: false
+
+# 2. FIX: set live value and save it to a file so it survives reboot
+- name: "Network | Apply required kernel settings"
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_file: "{{ cis_network_sysctl_file }}"
+    sysctl_set: true
+    state: present
+  loop: "{{ cis_network_settings }}"
+  loop_control:
+    label: "{{ item.id }}"
+
+# 3. RECORD
+- name: "Network | Record compliance results"
+  ansible.builtin.set_fact:
+    cis_results: "{{ cis_results | default([]) + [{
+      'id': item.item.id,
+      'control': item.item.title,
+      'expected': item.item.value,
+      'found': item.stdout,
+      'status': 'PASS' if item.stdout == item.item.value else ('FAIL' if ansible_check_mode else 'FIXED')
+      }] }}"
+  loop: "{{ cis_network_current.results }}"
+  loop_control:
+    label: "{{ item.item.id }}"

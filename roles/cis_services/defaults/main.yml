@@ -1,0 +1,8 @@
+---
+cis_services_controls:
+  - id: SVC-01
+    title: Telnet not installed
+    packages: [telnetd, inetutils-telnetd, telnet, inetutils-telnet]
+  - id: SVC-02
+    title: rsh and rlogin not installed
+    packages: [rsh-server, rsh-redone-server, rsh-client, rsh-redone-client]

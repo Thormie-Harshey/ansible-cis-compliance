@@ -1,0 +1,42 @@
+---
+# 1. AUDIT: read service states (safe in pretend mode)
+- name: "Logging | Read service states"
+  ansible.builtin.service_facts:
+
+- name: "Logging | Is rsyslog running?"
+  ansible.builtin.set_fact:
+    cis_logging_rsyslog_ok: "{{ (ansible_facts.services['rsyslog.service'] | default({})).get('state') == 'running' }}"
+
+# 2. FIX
+- name: "Logging | rsyslog installed"
+  ansible.builtin.apt:
+    name: rsyslog
+    state: present
+
+- name: "Logging | rsyslog running and starts at boot"
+  ansible.builtin.service:
+    name: rsyslog
+    state: started
+    enabled: true
+
+- name: "Logging | journald keeps logs on disk"
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/journald.conf
+    regexp: '^#?Storage='
+    line: Storage=persistent
+  register: cis_logging_journald
+  notify: Restart journald
+
+# 3. RECORD
+- name: "Logging | Record compliance results"
+  ansible.builtin.set_fact:
+    cis_results: "{{ cis_results | default([]) + [
+      {'id': 'LOG-01', 'control': 'rsyslog running',
+       'expected': 'running',
+       'found': 'running' if cis_logging_rsyslog_ok else 'not running',
+       'status': 'PASS' if cis_logging_rsyslog_ok else ('FAIL' if ansible_check_mode else 'FIXED')},
+      {'id': 'LOG-02', 'control': 'journald stores logs persistently',
+       'expected': 'Storage=persistent',
+       'found': 'not set' if cis_logging_journald.changed else 'Storage=persistent',
+       'status': 'PASS' if not cis_logging_journald.changed else ('FAIL' if ansible_check_mode else 'FIXED')}
+      ] }}"

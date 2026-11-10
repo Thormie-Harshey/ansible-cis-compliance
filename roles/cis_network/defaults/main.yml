@@ -1,0 +1,10 @@
+---
+cis_network_sysctl_file: /etc/sysctl.d/60-cis-network.conf
+
+cis_network_settings:
+  - { id: NET-01, title: "IP forwarding disabled", name: net.ipv4.ip_forward, value: "0" }
+  - { id: NET-02, title: "Send redirects disabled (all)", name: net.ipv4.conf.all.send_redirects, value: "0" }
+  - { id: NET-03, title: "Send redirects disabled (default)", name: net.ipv4.conf.default.send_redirects, value: "0" }
+  - { id: NET-04, title: "ICMP redirects not accepted (all)", name: net.ipv4.conf.all.accept_redirects, value: "0" }
+  - { id: NET-05, title: "ICMP redirects not accepted (default)", name: net.ipv4.conf.default.accept_redirects, value: "0" }
+  - { id: NET-06, title: "IPv6 ICMP redirects not accepted", name: net.ipv6.conf.all.accept_redirects, value: "0" }
