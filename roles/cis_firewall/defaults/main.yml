@@ -1,0 +1,7 @@
+---
+# Every server gets these
+cis_firewall_base_rules:
+  - { port: "22", proto: tcp, comment: "SSH" }
+
+# Each server group adds its own in group_vars
+cis_firewall_extra_rules: []

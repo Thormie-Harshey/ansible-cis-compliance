@@ -6,6 +6,7 @@
 
   roles:
     - cis_ssh
+    - cis_firewall
 
   post_tasks:
     # TEMPORARY: replaced by the cis_report role later

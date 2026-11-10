@@ -1,0 +1,56 @@
+---
+- name: "Firewall | Ensure UFW is installed"
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+# 1. AUDIT: read the firewall status (read-only, so don't pretend)
+- name: "Firewall | Read UFW status"
+  ansible.builtin.command: ufw status verbose
+  register: cis_firewall_status
+  check_mode: false
+  changed_when: false
+
+- name: "Firewall | Work out current compliance"
+  ansible.builtin.set_fact:
+    cis_firewall_active: "{{ 'Status: active' in cis_firewall_status.stdout }}"
+    cis_firewall_deny_in: "{{ 'Status: active' in cis_firewall_status.stdout and 'deny (incoming)' in cis_firewall_status.stdout }}"
+
+# 2. FIX: guest list first (SSH before anything else), then policy, then switch on
+- name: "Firewall | Allow required ports"
+  community.general.ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    comment: "{{ item.comment }}"
+  loop: "{{ cis_firewall_base_rules + cis_firewall_extra_rules }}"
+  loop_control:
+    label: "{{ item.port }}/{{ item.proto }}"
+
+- name: "Firewall | Default deny incoming"
+  community.general.ufw:
+    default: deny
+    direction: incoming
+
+- name: "Firewall | Default allow outgoing"
+  community.general.ufw:
+    default: allow
+    direction: outgoing
+
+- name: "Firewall | Enable UFW"
+  community.general.ufw:
+    state: enabled
+
+# 3. RECORD
+- name: "Firewall | Record compliance results"
+  ansible.builtin.set_fact:
+    cis_results: "{{ cis_results | default([]) + [
+      {'id': 'FW-01', 'control': 'UFW firewall enabled',
+       'expected': 'active',
+       'found': 'active' if cis_firewall_active else 'inactive',
+       'status': 'PASS' if cis_firewall_active else ('FAIL' if ansible_check_mode else 'FIXED')},
+      {'id': 'FW-02', 'control': 'Default deny incoming enforced',
+       'expected': 'deny (incoming)',
+       'found': 'deny (incoming)' if cis_firewall_deny_in else 'not enforced',
+       'status': 'PASS' if cis_firewall_deny_in else ('FAIL' if ansible_check_mode else 'FIXED')}
+      ] }}"

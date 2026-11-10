@@ -1,0 +1,3 @@
+---
+cis_firewall_extra_rules:
+  - { port: "5432", proto: tcp, comment: "PostgreSQL" }
