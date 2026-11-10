@@ -1,0 +1,53 @@
+---
+# 1. AUDIT (read-only, don't pretend)
+- name: "Users | Find accounts with empty passwords"
+  ansible.builtin.command:
+    cmd: >-
+      awk -F: '($2 == "") {print $1}' /etc/shadow
+  register: cis_users_empty_pw
+  check_mode: false
+  changed_when: false
+
+- name: "Users | Read sudo group members"
+  ansible.builtin.command: getent group sudo
+  register: cis_users_sudo_group
+  check_mode: false
+  changed_when: false
+
+- name: "Users | Work out who is not approved"
+  ansible.builtin.set_fact:
+    cis_users_empty_list: "{{ cis_users_empty_pw.stdout_lines }}"
+    cis_users_unauthorised: "{{ (cis_users_sudo_group.stdout.split(':')[3]).split(',')
+                                | reject('equalto', '') | difference(cis_users_allowed_sudo) }}"
+
+# 2. SAFETY NET: never remove our own master key
+- name: "Users | Check Ansible's own user is approved"
+  ansible.builtin.assert:
+    that: ansible_env.SUDO_USER in cis_users_allowed_sudo
+    fail_msg: "Stopping: {{ ansible_env.SUDO_USER }} is not on the approved list. Removing it would lock Ansible out."
+
+# 3. FIX (pretends in check mode)
+- name: "Users | Lock accounts with empty passwords"
+  ansible.builtin.user:
+    name: "{{ item }}"
+    password_lock: true
+  loop: "{{ cis_users_empty_list }}"
+
+- name: "Users | Remove unapproved users from sudo"
+  ansible.builtin.command: gpasswd -d {{ item }} sudo
+  loop: "{{ cis_users_unauthorised }}"
+  changed_when: true
+
+# 4. RECORD
+- name: "Users | Record compliance results"
+  ansible.builtin.set_fact:
+    cis_results: "{{ cis_results | default([]) + [
+      {'id': 'USR-01', 'control': 'No accounts with empty passwords',
+       'expected': 'none',
+       'found': cis_users_empty_list | join(', ') or 'none',
+       'status': 'PASS' if not cis_users_empty_list else ('FAIL' if ansible_check_mode else 'FIXED')},
+      {'id': 'USR-02', 'control': 'Only approved users have sudo',
+       'expected': cis_users_allowed_sudo | join(', '),
+       'found': cis_users_unauthorised | join(', ') or 'none unapproved',
+       'status': 'PASS' if not cis_users_unauthorised else ('FAIL' if ansible_check_mode else 'FIXED')}
+      ] }}"

@@ -1,0 +1,4 @@
+---
+# HR's approved list of master-key holders
+cis_users_allowed_sudo:
+  - ubuntu
