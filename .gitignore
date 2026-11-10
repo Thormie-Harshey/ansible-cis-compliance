@@ -10,3 +10,4 @@ terraform/terraform.tfvars
 
 # Latest run output (samples are kept)
 reports/compliance-report.*
+reports/cron.log

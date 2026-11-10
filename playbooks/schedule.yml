@@ -1,0 +1,20 @@
+---
+- name: Schedule nightly compliance audit
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+
+  vars:
+    cis_project_dir: "{{ playbook_dir | dirname }}"
+
+  tasks:
+    - name: Nightly CIS audit at 02:00 (pretend mode, report and email only)
+      ansible.builtin.cron:
+        name: "CIS compliance nightly audit"
+        minute: "0"
+        hour: "2"
+        job: >-
+          cd {{ cis_project_dir }} &&
+          /usr/bin/ansible-playbook playbooks/compliance.yml --check
+          >> reports/cron.log 2>&1
