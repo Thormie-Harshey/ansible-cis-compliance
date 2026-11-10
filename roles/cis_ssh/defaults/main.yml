@@ -1,0 +1,19 @@
+---
+cis_ssh_config_file: /etc/ssh/sshd_config.d/00-cis-hardening.conf
+
+cis_ssh_settings:
+  - id: SSH-01
+    title: Root login disabled
+    key: permitrootlogin
+    directive: PermitRootLogin
+    value: "no"
+  - id: SSH-02
+    title: Password authentication disabled
+    key: passwordauthentication
+    directive: PasswordAuthentication
+    value: "no"
+  - id: SSH-03
+    title: MaxAuthTries set to 4
+    key: maxauthtries
+    directive: MaxAuthTries
+    value: "4"

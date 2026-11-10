@@ -1,0 +1,14 @@
+---
+- name: CIS compliance audit and remediation
+  hosts: fleet
+  become: true
+  gather_facts: true
+
+  roles:
+    - cis_ssh
+
+  post_tasks:
+    # TEMPORARY: replaced by the cis_report role later
+    - name: Show compliance results
+      ansible.builtin.debug:
+        var: cis_results
