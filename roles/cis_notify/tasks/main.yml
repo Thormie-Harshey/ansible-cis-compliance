@@ -1,0 +1,32 @@
+---
+- name: "Notify | Count results across the fleet"
+  ansible.builtin.set_fact:
+    cis_notify_all: "{{ cis_report_hosts.values() | list | flatten(levels=1) }}"
+
+- name: "Notify | Email compliance summary"
+  community.general.mail:
+    host: "{{ cis_alert_smtp_host }}"
+    port: "{{ cis_alert_smtp_port }}"
+    secure: always
+    username: "{{ cis_alert_email_from }}"
+    password: "{{ cis_alert_smtp_password }}"
+    from: "CIS Compliance <{{ cis_alert_email_from }}>"
+    to: "{{ cis_alert_email_to }}"
+    subject: >-
+      CIS compliance: {{ cis_notify_all | selectattr('status', 'equalto', 'FAIL') | list | length }} FAIL,
+      {{ cis_notify_all | selectattr('status', 'equalto', 'FIXED') | list | length }} FIXED
+      ({{ cis_report_mode }})
+    body: |
+      CIS compliance run: {{ cis_report_generated }}
+      Mode: {{ cis_report_mode }}
+
+      {% for host, results in cis_report_hosts.items() %}
+      {{ host }}: {{ results | selectattr('status', 'equalto', 'PASS') | list | length }} PASS, {{ results | selectattr('status', 'equalto', 'FAIL') | list | length }} FAIL, {{ results | selectattr('status', 'equalto', 'FIXED') | list | length }} FIXED
+      {% endfor %}
+
+      Full report attached.
+    attach:
+      - "{{ cis_report_dir }}/compliance-report.html"
+  check_mode: false
+  no_log: "{{ cis_notify_hide_output | default(true) }}"
+  when: cis_alert_enabled | bool

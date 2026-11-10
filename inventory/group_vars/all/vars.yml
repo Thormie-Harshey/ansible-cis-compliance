@@ -1,0 +1,7 @@
+---
+cis_alert_enabled: true
+cis_alert_smtp_host: smtp.gmail.com
+cis_alert_smtp_port: 465
+cis_alert_email_from: ashayeadetomiwa77@gmail.com
+cis_alert_email_to: ashayeadetomiwa77@gmail.com
+cis_alert_smtp_password: "{{ vault_cis_alert_smtp_password }}"
