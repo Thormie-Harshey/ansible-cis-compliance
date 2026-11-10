@@ -1,0 +1,10 @@
+---
+cis_file_permissions_admin_user: ubuntu
+
+cis_file_permissions_files:
+  - { id: FP-01, title: "/etc/passwd is 644", path: /etc/passwd, mode: "0644", owner: root, group: root }
+  - { id: FP-02, title: "/etc/shadow is 600", path: /etc/shadow, mode: "0600", owner: root, group: shadow }
+  - { id: FP-03, title: "Admin authorized_keys is 600", path: "/home/{{ cis_file_permissions_admin_user }}/.ssh/authorized_keys", mode: "0600", owner: "{{ cis_file_permissions_admin_user }}", group: "{{ cis_file_permissions_admin_user }}" }
+  - { id: FP-04, title: "SSH host key (ed25519) is 600", path: /etc/ssh/ssh_host_ed25519_key, mode: "0600", owner: root, group: root }
+  - { id: FP-05, title: "SSH host key (rsa) is 600", path: /etc/ssh/ssh_host_rsa_key, mode: "0600", owner: root, group: root }
+  - { id: FP-06, title: "SSH host key (ecdsa) is 600", path: /etc/ssh/ssh_host_ecdsa_key, mode: "0600", owner: root, group: root }

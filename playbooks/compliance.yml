@@ -8,6 +8,7 @@
     - cis_ssh
     - cis_firewall
     - cis_users
+    - cis_file_permissions
 
   post_tasks:
     # TEMPORARY: replaced by the cis_report role later

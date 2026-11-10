@@ -1,0 +1,39 @@
+---
+# 1. AUDIT: stat only reads, so it is safe in pretend mode by itself
+- name: "Files | Read current permissions"
+  ansible.builtin.stat:
+    path: "{{ item.path }}"
+  register: cis_fp_before
+  loop: "{{ cis_file_permissions_files }}"
+  loop_control:
+    label: "{{ item.path }}"
+
+# 2. FIX: only files that exist (pretends in check mode)
+- name: "Files | Set required permissions"
+  ansible.builtin.file:
+    path: "{{ item.item.path }}"
+    mode: "{{ item.item.mode }}"
+    owner: "{{ item.item.owner }}"
+    group: "{{ item.item.group }}"
+  loop: "{{ cis_fp_before.results }}"
+  loop_control:
+    label: "{{ item.item.path }}"
+  when: item.stat.exists
+
+# 3. RECORD
+- name: "Files | Record compliance results"
+  ansible.builtin.set_fact:
+    cis_results: "{{ cis_results | default([]) + [{
+      'id': item.item.id,
+      'control': item.item.title,
+      'expected': item.item.mode ~ ' ' ~ item.item.owner ~ ':' ~ item.item.group,
+      'found': (item.stat.mode ~ ' ' ~ item.stat.pw_name ~ ':' ~ item.stat.gr_name) if item.stat.exists else 'file missing',
+      'status': 'N/A' if not item.stat.exists
+                else ('PASS' if (item.stat.mode == item.item.mode
+                                 and item.stat.pw_name == item.item.owner
+                                 and item.stat.gr_name == item.item.group)
+                      else ('FAIL' if ansible_check_mode else 'FIXED'))
+      }] }}"
+  loop: "{{ cis_fp_before.results }}"
+  loop_control:
+    label: "{{ item.item.id }}"
